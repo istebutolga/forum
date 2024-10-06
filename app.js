@@ -28,19 +28,24 @@ function sendMessage() {
             model: 'mistralai/Mixtral-8x7B-Instruct-v0.1'
         })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.successful === "success" && data.status === 200) {
             const gptResponse = data.response;
             conversationHistory.push({ role: 'assistant', content: gptResponse });
             addMessageToChat('ChatGPT', processResponse(gptResponse));
         } else {
-            console.error('API hatası:', data);
+            console.error('API yanıt hatası:', data);
             addMessageToChat('Sistem', 'Üzgünüz, bir hata oluştu. Lütfen tekrar deneyin.');
         }
     })
     .catch(error => {
-        console.error('Bağlantı hatası:', error);
+        console.error('Bağlantı veya işleme hatası:', error);
         addMessageToChat('Sistem', 'Bağlantı hatası, lütfen internet bağlantınızı kontrol edin.');
     });
 }
