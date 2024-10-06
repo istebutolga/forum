@@ -16,10 +16,20 @@
             <div id="messages"></div>
         </div>
         <div id="chat-input">
+            <!-- Görüntü yükleme alanı -->
+            <input type="file" id="image-upload" accept="image/*" style="display: none;">
+            <button id="upload-button">Görüntü Yükle</button>
             <textarea id="user-input" placeholder="Bir şeyler yazın..."></textarea>
             <button id="send-button">Gönder</button>
         </div>
     </div>
     <script src="app.js"></script>
+
+    <script>
+        // Görüntü yükleme butonuna tıklandığında dosya girişi açılır
+        document.getElementById('upload-button').addEventListener('click', function() {
+            document.getElementById('image-upload').click();
+        });
+    </script>
 </body>
 </html>

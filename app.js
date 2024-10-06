@@ -6,8 +6,17 @@ document.getElementById('user-input').addEventListener('keypress', function(e) {
     }
 });
 
-// Görüntü yükleme işlemi
-document.getElementById('image-upload').addEventListener('change', handleImageUpload);
+// Görüntü yükleme işlemi için bir dosya girişi ekleyin
+const imageUploadContainer = document.createElement('div');
+const imageUploadInput = document.createElement('input');
+imageUploadInput.type = 'file';
+imageUploadInput.accept = 'image/*';
+imageUploadInput.id = 'image-upload';
+imageUploadContainer.appendChild(imageUploadInput);
+document.getElementById('chat-input').insertBefore(imageUploadContainer, document.getElementById('send-button'));
+
+// Görüntü yükleme olayını dinleyin
+imageUploadInput.addEventListener('change', handleImageUpload);
 
 function handleImageUpload(event) {
     const file = event.target.files[0];
@@ -41,12 +50,11 @@ function sendMessage() {
     addMessageToChat('Kullanıcı', userInput);
     document.getElementById('user-input').value = '';
 
-    const proxyUrl = 'https://api.allorigins.win/get?url=';
-    const apiUrl = `https://chatgpt.ashlynn.workers.dev/gptweb/?question=${encodeURIComponent(userInput)}&lang=tr`;
+    const apiUrl = `https://chatgpt.ashlynn.workers.dev/?question=${encodeURIComponent(userInput)}`;
 
-    console.log("API isteği gönderiliyor: " + proxyUrl + apiUrl);
+    console.log("API isteği gönderiliyor: " + apiUrl);
 
-    fetch(proxyUrl + encodeURIComponent(apiUrl), {
+    fetch(apiUrl, {
         method: 'GET',
         mode: 'cors'
     })
@@ -59,9 +67,8 @@ function sendMessage() {
     })
     .then(data => {
         console.log('API yanıtı alındı:', data);
-        const jsonResponse = JSON.parse(data.contents);
-        if (jsonResponse.status === true && jsonResponse.code === 200) {
-            const gptResponse = jsonResponse.gpt; // API yanıtında "gpt" alanından cevap geliyor
+        if (data.status === true && data.code === 200) {
+            const gptResponse = data.gpt; // API yanıtında "gpt" alanından cevap geliyor
             
             // Kod bloğu algılama
             if (userInput.toLowerCase().includes("bana bu kodu yaz") || userInput.toLowerCase().includes("yaz")) {
@@ -70,7 +77,7 @@ function sendMessage() {
                 addMessageToChat('ChatGPT', gptResponse);
             }
         } else {
-            console.error('API yanıt hatası:', jsonResponse);
+            console.error('API yanıt hatası:', data);
             addMessageToChat('Sistem', 'Üzgünüz, bir hata oluştu. Lütfen tekrar deneyin.');
         }
     })
