@@ -21,6 +21,7 @@ function sendMessage() {
 
     fetch(apiUrl, {
         method: 'GET',
+        mode: 'cors' // CORS sorunlarını çözmeye yardımcı olabilir
     })
     .then(response => {
         console.log(`HTTP Yanıt Kodu: ${response.status}`);
