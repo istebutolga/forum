@@ -16,12 +16,12 @@ function sendMessage() {
     document.getElementById('user-input').value = '';
 
     // Yeni proxy kullanarak API isteği
-    const proxyUrl = 'https://thingproxy.freeboard.io/fetch/';
+    const proxyUrl = 'https://api.allorigins.win/get?url=';
     const apiUrl = `https://chatgpt.ashlynn.workers.dev/gptweb/?question=${encodeURIComponent(userInput)}`;
 
     console.log("API isteği gönderiliyor: " + proxyUrl + apiUrl);
 
-    fetch(proxyUrl + apiUrl, {
+    fetch(proxyUrl + encodeURIComponent(apiUrl), {
         method: 'GET',
         mode: 'cors' // CORS sorunlarını çözmek için
     })
@@ -34,11 +34,12 @@ function sendMessage() {
     })
     .then(data => {
         console.log('API yanıtı alındı:', data);
-        if (data.status === true && data.code === 200) {
-            const gptResponse = data.gpt; // API yanıtında "gpt" alanından cevap geliyor
+        const jsonResponse = JSON.parse(data.contents);
+        if (jsonResponse.status === true && jsonResponse.code === 200) {
+            const gptResponse = jsonResponse.gpt; // API yanıtında "gpt" alanından cevap geliyor
             addMessageToChat('ChatGPT', gptResponse);
         } else {
-            console.error('API yanıt hatası:', data);
+            console.error('API yanıt hatası:', jsonResponse);
             addMessageToChat('Sistem', 'Üzgünüz, bir hata oluştu. Lütfen tekrar deneyin.');
         }
     })
