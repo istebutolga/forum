@@ -15,13 +15,15 @@ function sendMessage() {
     addMessageToChat('Kullanıcı', userInput);
     document.getElementById('user-input').value = '';
 
+    // CORS Anywhere proxy ile API isteği
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
     const apiUrl = `https://chatgpt.ashlynn.workers.dev/gptweb/?question=${encodeURIComponent(userInput)}`;
 
-    console.log("API isteği gönderiliyor: " + apiUrl);
+    console.log("API isteği gönderiliyor: " + proxyUrl + apiUrl);
 
-    fetch(apiUrl, {
+    fetch(proxyUrl + apiUrl, {
         method: 'GET',
-        mode: 'cors' // CORS sorunlarını çözmeye yardımcı olabilir
+        mode: 'cors' // CORS sorunlarını çözmek için
     })
     .then(response => {
         console.log(`HTTP Yanıt Kodu: ${response.status}`);
