@@ -15,8 +15,8 @@ function sendMessage() {
     addMessageToChat('Kullanıcı', userInput);
     document.getElementById('user-input').value = '';
 
-    // CORS Anywhere proxy ile API isteği
-    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    // Yeni proxy kullanarak API isteği
+    const proxyUrl = 'https://thingproxy.freeboard.io/fetch/';
     const apiUrl = `https://chatgpt.ashlynn.workers.dev/gptweb/?question=${encodeURIComponent(userInput)}`;
 
     console.log("API isteği gönderiliyor: " + proxyUrl + apiUrl);
