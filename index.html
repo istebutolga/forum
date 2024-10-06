@@ -3,50 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChatGPT Web Uygulaması</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <title>Biyografi - Yazılım Geliştiricisi</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="chat-container">
-        <div id="chat-header">
-            <h2>ChatGPT Sohbet</h2>
-        </div>
-        <div id="chat-box">
-            <div id="messages"></div>
-            <div id="typing-info" style="display:none;">Yazıyor...</div>
-        </div>
-        <div id="chat-input">
-            <input type="file" id="image-upload" accept="image/*" style="display: none;">
-            <button id="upload-button" title="Görüntü Yükle">
-                <img src="upload-icon.png" alt="Görüntü Yükle" style="width: 24px; height: 24px;">
-            </button>
-            <textarea id="user-input" placeholder="Bir şeyler yazın..."></textarea>
-            <button id="send-button">Gönder</button>
-        </div>
-    </div>
-    <script src="app.js"></script>
-
-    <script>
-        // Görüntü yükleme butonuna tıklandığında dosya girişi açılır
-        document.getElementById('upload-button').addEventListener('click', function() {
-            document.getElementById('image-upload').click();
-        });
-
-        // Sayfa açıldığında fade animasyonu
-        window.onload = function() {
-            document.body.style.opacity = 0;
-            let fadeEffect = setInterval(function () {
-                if (!document.body.style.opacity) {
-                    document.body.style.opacity = 0;
-                }
-                if (document.body.style.opacity < 1) {
-                    document.body.style.opacity += 0.1;
-                } else {
-                    clearInterval(fadeEffect);
-                }
-            }, 50);
-        };
-    </script>
+    <header>
+        <h1>Yazılım Geliştiricisi Adınız</h1>
+        <img src="images/profile.jpg" alt="Profil Resmi" id="profile-img">
+    </header>
+    <main>
+        <section id="biography">
+            <h2>Biyografi</h2>
+            <p>Kendi biyografinizi buraya yazabilirsiniz. Eğitim geçmişi, çalışma tecrübeleri ve ilgi alanlarınızdan bahsedin.</p>
+        </section>
+        <section id="skills">
+            <h2>Yetenekler</h2>
+            <ul>
+                <li>HTML</li>
+                <li>CSS</li>
+                <li>JavaScript</li>
+                <li>PHP</li>
+                <li>Python</li>
+                <!-- Daha fazla yetenek ekleyebilirsiniz -->
+            </ul>
+        </section>
+        <section id="projects">
+            <h2>Projeler</h2>
+            <ul>
+                <li>Proje 1 - Açıklama</li>
+                <li>Proje 2 - Açıklama</li>
+                <li>Proje 3 - Açıklama</li>
+                <!-- Daha fazla proje ekleyebilirsiniz -->
+            </ul>
+        </section>
+    </main>
+    <footer>
+        <p>İletişim: <a href="mailto:tolgaozturk995@outlook.com">mutlutarcin@outlook.com</a></p>
+        <p>&copy; 2024 Yazılım Geliştiricisi Adınız</p>
+    </footer>
+    <script src="script.js"></script>
 </body>
 </html>
