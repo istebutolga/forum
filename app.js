@@ -12,31 +12,24 @@ function sendMessage() {
     fetch(`https://chatgpt.ashlynn.workers.dev/?question=${encodeURIComponent(userInput)}`)
         .then(response => response.json())
         .then(data => {
-            const gptResponse = data.gpt;
-            addMessageToChat('ChatGPT', gptResponse);
+            if (data.status && data.code === 200) {
+                const gptResponse = data.gpt;
+                addMessageToChat('ChatGPT', gptResponse);
+            } else {
+                console.error('API hatası:', data);
+                addMessageToChat('Sistem', 'Üzgünüz, bir hata oluştu. Lütfen tekrar deneyin.');
+            }
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {
+            console.error('Bağlantı hatası:', error);
+            addMessageToChat('Sistem', 'Bağlantı hatası, lütfen internet bağlantınızı kontrol edin.');
+        });
 }
 
 function addMessageToChat(sender, message) {
     const messagesDiv = document.getElementById('messages');
     const messageElement = document.createElement('div');
-    messageElement.classList.add(sender === 'ChatGPT' && isCodeBlock(message) ? 'code-block' : '');
     messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
-    if (sender === 'ChatGPT' && isCodeBlock(message)) {
-        const copyButton = document.createElement('button');
-        copyButton.classList.add('copy-button');
-        copyButton.textContent = 'Kopyala';
-        copyButton.onclick = () => {
-            navigator.clipboard.writeText(message);
-            alert('Kod kopyalandı!');
-        };
-        messageElement.appendChild(copyButton);
-    }
     messagesDiv.appendChild(messageElement);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
-}
-
-function isCodeBlock(text) {
-    return /```/.test(text);
 }
