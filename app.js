@@ -9,11 +9,11 @@ function sendMessage() {
     addMessageToChat('Kullanıcı', userInput);
     document.getElementById('user-input').value = '';
 
-    fetch(`https://lord-apis.ashlynn.workers.dev/?question=${encodeURIComponent(userInput)}&mode=Llama`)
+    fetch(`https://darkness.ashlynn.workers.dev/chat/?prompt=${encodeURIComponent(userInput)}&model=mistralai/Mixtral-8x7B-Instruct-v0.1`)
         .then(response => response.json())
         .then(data => {
-            if (data.status && data.code === 200) {
-                const gptResponse = data.message;
+            if (data.successful === "success" && data.status === 200) {
+                const gptResponse = data.response;
                 addMessageToChat('ChatGPT', gptResponse);
             } else {
                 console.error('API hatası:', data);
