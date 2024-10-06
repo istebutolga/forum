@@ -14,7 +14,7 @@ function sendMessage() {
         .then(data => {
             if (data.successful === "success" && data.status === 200) {
                 const gptResponse = data.response;
-                addMessageToChat('ChatGPT', gptResponse);
+                addMessageToChat('ChatGPT', processResponse(gptResponse));
             } else {
                 console.error('API hatası:', data);
                 addMessageToChat('Sistem', 'Üzgünüz, bir hata oluştu. Lütfen tekrar deneyin.');
@@ -26,24 +26,18 @@ function sendMessage() {
         });
 }
 
+function processResponse(response) {
+    // Basit bir örnekle kod kelimelerini <code> etiketine alalım
+    // Burada regex ile 'code', 'function', 'const' gibi anahtar kelimeleri yakalayacağız
+    return response.replace(/(code|function|const|let|var|if|else|return|class|import|export|<[^>]*>)/g, match => {
+        return `<code>${match}</code> <button class="copy-btn" onclick="copyToClipboard('${match}')">📋</button>`;
+    });
+}
+
 function addMessageToChat(sender, message) {
     const messagesDiv = document.getElementById('messages');
     const messageElement = document.createElement('div');
-    
-    if (message.includes('<code>')) {
-        const codeContent = message.replace(/<\/?code>/g, '');
-        const codeBlock = document.createElement('pre');
-        codeBlock.textContent = codeContent;
-        
-        const copyButton = document.createElement('button');
-        copyButton.textContent = 'Kopyala';
-        copyButton.onclick = () => copyToClipboard(codeContent);
-        messageElement.appendChild(codeBlock);
-        messageElement.appendChild(copyButton);
-    } else {
-        messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
-    }
-
+    messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
     messagesDiv.appendChild(messageElement);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
