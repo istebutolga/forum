@@ -18,6 +18,9 @@ function sendMessage() {
     addMessageToChat('Kullanıcı', userInput);
     document.getElementById('user-input').value = '';
 
+    // API isteği yapılmadan önce hata ayıklama mesajı
+    console.log("API isteği gönderiliyor...");
+
     fetch(`https://darkness.ashlynn.workers.dev/chat/`, {
         method: 'POST',
         headers: {
@@ -29,6 +32,8 @@ function sendMessage() {
         })
     })
     .then(response => {
+        // HTTP yanıt kodlarının kontrolü
+        console.log(`HTTP Yanıt Kodu: ${response.status}`);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
