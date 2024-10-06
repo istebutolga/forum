@@ -51,6 +51,18 @@ body {
     align-items: center;
 }
 
+#chat-input input[type="file"] {
+    display: none; /* Gizli tut */
+}
+
+#upload-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-right: 10px;
+}
+
 #chat-input textarea {
     flex: 1;
     padding: 10px;
@@ -58,6 +70,8 @@ body {
     border-radius: 4px;
     resize: none;
     margin-right: 10px;
+    min-height: 50px; /* Minimum yükseklik ayarlandı */
+    font-size: 16px; /* Yazı boyutu büyütüldü */
 }
 
 #chat-input button {
@@ -72,12 +86,4 @@ body {
 
 #chat-input button:hover {
     background-color: #0056b3;
-}
-
-#upload-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    margin-right: 10px;
 }
