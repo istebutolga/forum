@@ -41,7 +41,7 @@ function sendMessage() {
     })
     .catch(error => {
         console.error('Bağlantı veya işleme hatası:', error);
-        addMessageToChat('Sistem', 'Bağlantı hatası, lütfen internet bağlantınızı kontrol edin.');
+        addMessageToChat('Sistem', `Bağlantı hatası, lütfen internet bağlantınızı kontrol edin. Hata: ${error.message}`);
     });
 }
 
