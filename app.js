@@ -15,7 +15,7 @@ function sendMessage() {
     addMessageToChat('Kullanıcı', userInput);
     document.getElementById('user-input').value = '';
 
-    const apiUrl = `https://evil.darkhacker7301.workers.dev/?question=${encodeURIComponent(userInput)}`;
+    const apiUrl = `https://lord-apis.ashlynn.workers.dev/?question=${encodeURIComponent(userInput)}&mode=Gemini`;
 
     console.log("API isteği gönderiliyor: " + apiUrl);
 
@@ -32,7 +32,7 @@ function sendMessage() {
     .then(data => {
         console.log('API yanıtı alındı:', data);
         if (data.status === true && data.code === 200) {
-            const gptResponse = data.gpt;
+            const gptResponse = data.message;
             addMessageToChat('ChatGPT', gptResponse);
         } else {
             console.error('API yanıt hatası:', data);
