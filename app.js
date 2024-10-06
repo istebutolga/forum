@@ -29,7 +29,29 @@ function sendMessage() {
 function addMessageToChat(sender, message) {
     const messagesDiv = document.getElementById('messages');
     const messageElement = document.createElement('div');
-    messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
+    
+    if (message.includes('<code>')) {
+        const codeContent = message.replace(/<\/?code>/g, '');
+        const codeBlock = document.createElement('pre');
+        codeBlock.textContent = codeContent;
+        
+        const copyButton = document.createElement('button');
+        copyButton.textContent = 'Kopyala';
+        copyButton.onclick = () => copyToClipboard(codeContent);
+        messageElement.appendChild(codeBlock);
+        messageElement.appendChild(copyButton);
+    } else {
+        messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
+    }
+
     messagesDiv.appendChild(messageElement);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert('Kod kopyalandı!');
+    }).catch(err => {
+        console.error('Kopyalama hatası:', err);
+    });
 }
