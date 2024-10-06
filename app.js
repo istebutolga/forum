@@ -1,8 +1,14 @@
 document.getElementById('send-button').addEventListener('click', sendMessage);
+document.getElementById('user-input').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+    }
+});
 
 function sendMessage() {
-    const userInput = document.getElementById('user-input').value;
-    if (userInput.trim() === "") {
+    const userInput = document.getElementById('user-input').value.trim();
+    if (userInput === "") {
         return;
     }
 
@@ -27,19 +33,16 @@ function sendMessage() {
 }
 
 function processResponse(response) {
-    // ``` dil etiketi ile belirtilmiş kod bloklarını tespit etme
     const codeBlockRegex = /```(python|javascript|html|css|java|c\+\+|c#)?\n([\s\S]*?)```/g;
-    let formattedResponse = response.replace(codeBlockRegex, (match, lang, code) => {
-        // Kod bloğunu <pre><code> ile sar ve yanına kopyalama butonu ekle
+    return response.replace(codeBlockRegex, (match, lang, code) => {
         return `<pre><code class="${lang}">${code.trim()}</code></pre><button class="copy-btn" onclick="copyToClipboard(\`${code.trim()}\`)">📋</button>`;
     });
-
-    return formattedResponse;
 }
 
 function addMessageToChat(sender, message) {
     const messagesDiv = document.getElementById('messages');
     const messageElement = document.createElement('div');
+    messageElement.classList.add(sender === 'Kullanıcı' ? 'user-message' : 'gpt-message');
     messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
     messagesDiv.appendChild(messageElement);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
