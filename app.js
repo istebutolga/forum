@@ -27,11 +27,14 @@ function sendMessage() {
 }
 
 function processResponse(response) {
-    // Basit bir örnekle kod kelimelerini <code> etiketine alalım
-    // Burada regex ile 'code', 'function', 'const' gibi anahtar kelimeleri yakalayacağız
-    return response.replace(/(code|function|const|let|var|if|else|return|class|import|export|<[^>]*>)/g, match => {
-        return `<code>${match}</code> <button class="copy-btn" onclick="copyToClipboard('${match}')">📋</button>`;
+    // ``` ile belirtilmiş kod bloklarını tespit etme
+    const codeBlockRegex = /```([\s\S]*?)```/g;
+    let formattedResponse = response.replace(codeBlockRegex, (match, code) => {
+        // Kod bloğunu <pre><code> ile sar ve yanına kopyalama butonu ekle
+        return `<pre><code>${code.trim()}</code></pre><button class="copy-btn" onclick="copyToClipboard(\`${code.trim()}\`)">📋</button>`;
     });
+
+    return formattedResponse;
 }
 
 function addMessageToChat(sender, message) {
