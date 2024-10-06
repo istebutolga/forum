@@ -20,15 +20,8 @@ function sendMessage() {
 
     console.log("API isteği gönderiliyor...");
 
-    fetch(`https://darkness.ashlynn.workers.dev/chat/`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            prompt: conversationHistory.map(msg => `${msg.role}: ${msg.content}`).join("\n"),
-            model: 'mistralai/Mixtral-8x7B-Instruct-v0.1'
-        })
+    fetch(`https://evil.darkhacker7301.workers.dev/?question=${encodeURIComponent(userInput)}`, {
+        method: 'GET',
     })
     .then(response => {
         console.log(`HTTP Yanıt Kodu: ${response.status}`);
@@ -39,8 +32,8 @@ function sendMessage() {
     })
     .then(data => {
         console.log('API yanıtı alındı:', data);
-        if (data.successful === "success" && data.status === 200) {
-            const gptResponse = data.response;
+        if (data.status === true && data.code === 200) {
+            const gptResponse = data.gpt;
             conversationHistory.push({ role: 'assistant', content: gptResponse });
             addMessageToChat('ChatGPT', processResponse(gptResponse));
         } else {
