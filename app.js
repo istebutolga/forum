@@ -6,30 +6,43 @@ document.getElementById('user-input').addEventListener('keypress', function(e) {
     }
 });
 
+let conversationHistory = [];
+
 function sendMessage() {
     const userInput = document.getElementById('user-input').value.trim();
     if (userInput === "") {
         return;
     }
 
+    conversationHistory.push({ role: 'user', content: userInput });
     addMessageToChat('Kullanıcı', userInput);
     document.getElementById('user-input').value = '';
 
-    fetch(`https://darkness.ashlynn.workers.dev/chat/?prompt=${encodeURIComponent(userInput)}&model=mistralai/Mixtral-8x7B-Instruct-v0.1`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.successful === "success" && data.status === 200) {
-                const gptResponse = data.response;
-                addMessageToChat('ChatGPT', processResponse(gptResponse));
-            } else {
-                console.error('API hatası:', data);
-                addMessageToChat('Sistem', 'Üzgünüz, bir hata oluştu. Lütfen tekrar deneyin.');
-            }
+    fetch(`https://darkness.ashlynn.workers.dev/chat/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            prompt: conversationHistory.map(msg => `${msg.role}: ${msg.content}`).join("\n"),
+            model: 'mistralai/Mixtral-8x7B-Instruct-v0.1'
         })
-        .catch(error => {
-            console.error('Bağlantı hatası:', error);
-            addMessageToChat('Sistem', 'Bağlantı hatası, lütfen internet bağlantınızı kontrol edin.');
-        });
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.successful === "success" && data.status === 200) {
+            const gptResponse = data.response;
+            conversationHistory.push({ role: 'assistant', content: gptResponse });
+            addMessageToChat('ChatGPT', processResponse(gptResponse));
+        } else {
+            console.error('API hatası:', data);
+            addMessageToChat('Sistem', 'Üzgünüz, bir hata oluştu. Lütfen tekrar deneyin.');
+        }
+    })
+    .catch(error => {
+        console.error('Bağlantı hatası:', error);
+        addMessageToChat('Sistem', 'Bağlantı hatası, lütfen internet bağlantınızı kontrol edin.');
+    });
 }
 
 function processResponse(response) {
