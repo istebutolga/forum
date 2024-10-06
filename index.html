@@ -14,11 +14,13 @@
         </div>
         <div id="chat-box">
             <div id="messages"></div>
+            <div id="typing-info" style="display:none;">Yazıyor...</div>
         </div>
         <div id="chat-input">
-            <!-- Görüntü yükleme alanı -->
             <input type="file" id="image-upload" accept="image/*" style="display: none;">
-            <button id="upload-button">Görüntü Yükle</button>
+            <button id="upload-button" title="Görüntü Yükle">
+                <img src="upload-icon.png" alt="Görüntü Yükle" style="width: 20px; height: 20px;">
+            </button>
             <textarea id="user-input" placeholder="Bir şeyler yazın..."></textarea>
             <button id="send-button">Gönder</button>
         </div>
@@ -30,6 +32,21 @@
         document.getElementById('upload-button').addEventListener('click', function() {
             document.getElementById('image-upload').click();
         });
+
+        // Sayfa açıldığında fade animasyonu
+        window.onload = function() {
+            document.body.style.opacity = 0;
+            let fadeEffect = setInterval(function () {
+                if (!document.body.style.opacity) {
+                    document.body.style.opacity = 0;
+                }
+                if (document.body.style.opacity < 1) {
+                    document.body.style.opacity += 0.1;
+                } else {
+                    clearInterval(fadeEffect);
+                }
+            }, 50);
+        };
     </script>
 </body>
 </html>

@@ -7,15 +7,7 @@ document.getElementById('user-input').addEventListener('keypress', function(e) {
 });
 
 // Görüntü yükleme işlemi için bir dosya girişi ekleyin
-const imageUploadContainer = document.createElement('div');
-const imageUploadInput = document.createElement('input');
-imageUploadInput.type = 'file';
-imageUploadInput.accept = 'image/*';
-imageUploadInput.id = 'image-upload';
-imageUploadContainer.appendChild(imageUploadInput);
-document.getElementById('chat-input').insertBefore(imageUploadContainer, document.getElementById('send-button'));
-
-// Görüntü yükleme olayını dinleyin
+const imageUploadInput = document.getElementById('image-upload');
 imageUploadInput.addEventListener('change', handleImageUpload);
 
 function handleImageUpload(event) {
@@ -50,6 +42,11 @@ function sendMessage() {
     addMessageToChat('Kullanıcı', userInput);
     document.getElementById('user-input').value = '';
 
+    // "Yazıyor..." mesajını göster
+    const typingInfo = document.getElementById('typing-info');
+    typingInfo.style.display = 'block';
+    typingInfo.style.opacity = 1; // Görünür yap
+
     const apiUrl = `https://chatgpt.ashlynn.workers.dev/?question=${encodeURIComponent(userInput)}`;
 
     console.log("API isteği gönderiliyor: " + apiUrl);
@@ -67,6 +64,8 @@ function sendMessage() {
     })
     .then(data => {
         console.log('API yanıtı alındı:', data);
+        typingInfo.style.opacity = 0; // Yazma durumu mesajını gizle
+
         if (data.status === true && data.code === 200) {
             const gptResponse = data.gpt; // API yanıtında "gpt" alanından cevap geliyor
             
@@ -83,6 +82,7 @@ function sendMessage() {
     })
     .catch(error => {
         console.error('Bağlantı veya işleme hatası:', error);
+        typingInfo.style.opacity = 0; // Yazma durumu mesajını gizle
         addMessageToChat('Sistem', `Bağlantı hatası, lütfen internet bağlantınızı kontrol edin. Hata: ${error.message}`);
     });
 }
