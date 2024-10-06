@@ -27,11 +27,11 @@ function sendMessage() {
 }
 
 function processResponse(response) {
-    // ``` ile belirtilmiş kod bloklarını tespit etme
-    const codeBlockRegex = /```([\s\S]*?)```/g;
-    let formattedResponse = response.replace(codeBlockRegex, (match, code) => {
+    // ``` dil etiketi ile belirtilmiş kod bloklarını tespit etme
+    const codeBlockRegex = /```(python|javascript|html|css|java|c\+\+|c#)?\n([\s\S]*?)```/g;
+    let formattedResponse = response.replace(codeBlockRegex, (match, lang, code) => {
         // Kod bloğunu <pre><code> ile sar ve yanına kopyalama butonu ekle
-        return `<pre><code>${code.trim()}</code></pre><button class="copy-btn" onclick="copyToClipboard(\`${code.trim()}\`)">📋</button>`;
+        return `<pre><code class="${lang}">${code.trim()}</code></pre><button class="copy-btn" onclick="copyToClipboard(\`${code.trim()}\`)">📋</button>`;
     });
 
     return formattedResponse;
